@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Question - CSS Learning Hub{% endblock %}
+
+{% block content %}
+<div class="quiz-question-container">
+    <a href="{{ url_for('main.quiz_list') }}" class="btn-back">&larr; Back to Quizzes</a>
+    
+    <div class="quiz-content">
+        <div class="quiz-info">
+            <span class="difficulty difficulty-{{ quiz.difficulty.lower() }}">{{ quiz.difficulty }}</span>
+        </div>
+
+        <h2>{{ quiz.question }}</h2>
+
+        <form id="quiz-form" class="quiz-form">
+            <div class="form-group">
+                <label>
+                    <input type="text" name="student_name" placeholder="Your Name" required>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="email" name="student_email" placeholder="Your Email" required>
+                </label>
+            </div>
+
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="answer" value="A" required>
+                    <span class="option-letter">A</span>
+                    <span class="option-text">{{ quiz.option_a }}</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="answer" value="B" required>
+                    <span class="option-letter">B</span>
+                    <span class="option-text">{{ quiz.option_b }}</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="answer" value="C" required>
+                    <span class="option-letter">C</span>
+                    <span class="option-text">{{ quiz.option_c }}</span>
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="answer" value="D" required>
+                    <span class="option-letter">D</span>
+                    <span class="option-text">{{ quiz.option_d }}</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-submit">Submit Answer</button>
+        </form>
+
+        <div id="result" class="result hidden">
+            <div id="result-message"></div>
+            <a href="{{ url_for('main.quiz_list') }}" class="btn-next">Next Question</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('quiz-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = {
+        student_name: formData.get('student_name'),
+        student_email: formData.get('student_email'),
+        quiz_id: {{ quiz.id }},
+        answer: formData.get('answer')
+    };
+
+    try {
+        const response = await fetch('{{ url_for("main.submit_answer") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+            const resultDiv = document.getElementById('result');
+            const messageDiv = document.getElementById('result-message');
+            
+            if (result.is_correct) {
+                messageDiv.innerHTML = `<p class="correct">✓ ${result.message}</p>`;
+                messageDiv.style.color = 'green';
+            } else {
+                messageDiv.innerHTML = `<p class="incorrect">✗ ${result.message}<br>Correct Answer: ${result.correct_answer}</p>`;
+                messageDiv.style.color = 'red';
+            }
+            
+            document.getElementById('quiz-form').classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while submitting your answer.');
+    }
+});
+</script>
+{% endblock %}

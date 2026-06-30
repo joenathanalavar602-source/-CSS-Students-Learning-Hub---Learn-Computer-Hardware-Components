@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Learning Activities - CSS Learning Hub{% endblock %}
+
+{% block content %}
+<div class="activities-container">
+    <h1>Learning Activities</h1>
+    <p class="subtitle">Test your knowledge and reinforce your learning</p>
+
+    <div class="activities-grid">
+        <a href="{{ url_for('main.quiz_list') }}" class="activity-card quiz-card">
+            <h2>📝 Quizzes</h2>
+            <p>Test your knowledge with multiple-choice questions</p>
+            <span class="count">{{ quiz_count }} quizzes available</span>
+        </a>
+
+        <a href="{{ url_for('main.flashcards') }}" class="activity-card flashcard-card">
+            <h2>🎴 Flashcards</h2>
+            <p>Study with interactive flashcards</p>
+            <span class="count">{{ flashcard_count }} flashcards available</span>
+        </a>
+
+        <div class="activity-card review-card">
+            <h2>✅ Review</h2>
+            <p>Review your answers and track your progress</p>
+            <span class="count">Coming soon</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

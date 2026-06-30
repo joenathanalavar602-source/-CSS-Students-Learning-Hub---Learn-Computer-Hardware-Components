@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Flashcards - CSS Learning Hub{% endblock %}
+
+{% block content %}
+<div class="flashcards-container">
+    <a href="{{ url_for('main.activities') }}" class="btn-back">&larr; Back to Activities</a>
+    
+    <h1>Flashcards</h1>
+    <p class="subtitle">Study with interactive flashcards</p>
+
+    <div class="flashcard-study-area">
+        <div id="flashcard" class="flashcard">
+            <div class="flashcard-inner">
+                <div class="flashcard-front">
+                    <p>Click to reveal answer</p>
+                </div>
+                <div class="flashcard-back hidden">
+                    <p>Back side</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard-controls">
+            <button id="flip-btn" class="btn">Flip Card</button>
+            <button id="next-btn" class="btn">Next Card</button>
+        </div>
+    </div>
+
+    {% if flashcards %}
+    <div class="flashcards-list">
+        <h2>All Flashcards</h2>
+        {% for flashcard in flashcards %}
+        <div class="flashcard-item">
+            <strong>{{ flashcard.front }}</strong>
+            <p>{{ flashcard.back }}</p>
+            <span class="category">{{ flashcard.category }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-data">No flashcards available yet.</p>
+    {% endif %}
+</div>
+
+<script>
+let currentFlashcard = null;
+
+async function loadRandomFlashcard() {
+    try {
+        const response = await fetch('{{ url_for("main.get_random_flashcard") }}');
+        const data = await response.json();
+        
+        currentFlashcard = data;
+        
+        document.querySelector('.flashcard-front p').textContent = data.front;
+        document.querySelector('.flashcard-back p').textContent = data.back;
+        
+        document.querySelector('.flashcard-back').classList.add('hidden');
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+document.getElementById('flip-btn').addEventListener('click', () => {
+    document.querySelector('.flashcard-back').classList.toggle('hidden');
+});
+
+document.getElementById('next-btn').addEventListener('click', () => {
+    loadRandomFlashcard();
+});
+
+// Load first flashcard on page load
+loadRandomFlashcard();
+</script>
+{% endblock %}

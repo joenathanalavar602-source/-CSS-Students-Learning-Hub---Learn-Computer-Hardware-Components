@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Quizzes - CSS Learning Hub{% endblock %}
+
+{% block content %}
+<div class="quiz-list-container">
+    <a href="{{ url_for('main.activities') }}" class="btn-back">&larr; Back to Activities</a>
+    
+    <h1>Quizzes</h1>
+    <p class="subtitle">Select a quiz to test your knowledge</p>
+
+    {% if quizzes %}
+    <div class="quiz-grid">
+        {% for quiz in quizzes %}
+        <div class="quiz-card">
+            <h3>Question {{ quiz.id }}</h3>
+            <p class="question-preview">{{ quiz.question[:100] }}...</p>
+            <span class="difficulty difficulty-{{ quiz.difficulty.lower() }}">{{ quiz.difficulty }}</span>
+            <a href="{{ url_for('main.quiz_question', quiz_id=quiz.id) }}" class="btn-start">Start Quiz</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-data">No quizzes available yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

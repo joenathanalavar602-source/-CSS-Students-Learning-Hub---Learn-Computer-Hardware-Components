@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Home - CSS Students Learning Hub{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <section class="hero">
+        <h1>Welcome to CSS Students Learning Hub</h1>
+        <p>Learn about Computer Hardware Components in an interactive way</p>
+    </section>
+
+    <section class="button-container">
+        <a href="{{ url_for('main.hardware') }}" class="main-button hardware-btn">
+            <h2>💻 Computer Hardware Components</h2>
+            <p>Learn about computer hardware and their functions</p>
+        </a>
+
+        <a href="{{ url_for('main.activities') }}" class="main-button activities-btn">
+            <h2>📚 Learning Activities</h2>
+            <p>Test your knowledge with quizzes, flashcards & more</p>
+        </a>
+
+        <a href="{{ url_for('main.about') }}" class="main-button about-btn">
+            <h2>❓ About / Guide / Help</h2>
+            <p>Learn how to use this platform and about our research</p>
+        </a>
+    </section>
+</div>
+{% endblock %}

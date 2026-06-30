@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Computer Hardware Components - CSS Learning Hub{% endblock %}
+
+{% block content %}
+<div class="hardware-container">
+    <h1>Computer Hardware Components</h1>
+    <p class="subtitle">Learn about the essential components that make up a computer</p>
+
+    {% if components %}
+    <div class="components-grid">
+        {% for component in components %}
+        <div class="component-card">
+            <h2>{{ component.name }}</h2>
+            <p class="description">{{ component.description }}</p>
+            <p class="function"><strong>Function:</strong> {{ component.function }}</p>
+            <a href="{{ url_for('main.hardware_detail', component_id=component.id) }}" class="btn-learn-more">Learn More</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-data">No hardware components available yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

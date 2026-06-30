@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{{ component.name }} - CSS Learning Hub{% endblock %}
+
+{% block content %}
+<div class="component-detail-container">
+    <a href="{{ url_for('main.hardware') }}" class="btn-back">&larr; Back to Hardware</a>
+    
+    <div class="component-detail">
+        <h1>{{ component.name }}</h1>
+        <p class="description">{{ component.description }}</p>
+        
+        <section class="function-section">
+            <h2>Function</h2>
+            <p>{{ component.function }}</p>
+        </section>
+
+        {% if component.image_url %}
+        <section class="image-section">
+            <img src="{{ component.image_url }}" alt="{{ component.name }}" class="component-image">
+        </section>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
